@@ -7,7 +7,7 @@ set -e
 # ---------------------------------------------------------------
 
 # Start the backend (Spring Boot) in the background
-cd backend
+cd ../backend
 if [ -f "./mvnw" ]; then
   echo "Starting Spring Boot via Maven Wrapper..."
   ./mvnw spring-boot:run &
