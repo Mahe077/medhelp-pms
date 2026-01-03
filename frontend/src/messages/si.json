@@ -1,0 +1,30 @@
+{
+  "Login": {
+    "title": "නැවත සාදරයෙන් පිළිගනිමු",
+    "description": "ඔබේ උපකරණ පුවරුවට පිවිසීමට ඔබේ අක්තපත්‍ර ඇතුළත් කරන්න",
+    "emailLabel": "විද්‍යුත් තැපැල් ලිපිනය",
+    "emailPlaceholder": "name@pharmacy.com",
+    "passwordLabel": "මුරපදය",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "මුරපදය අමතකද?",
+    "rememberMe": "දින 30 ක් මාව මතක තබා ගන්න",
+    "signIn": "ඇතුල් වන්න",
+    "orContinueWith": "නැතහොත් සමඟ දිගටම කරගෙන යන්න",
+    "noAccount": "ගිණුමක් නැද්ද?",
+    "requestAccess": "ප්‍රවේශය ඉල්ලන්න",
+    "brandingTitle": "MedHelp PMS",
+    "brandingHeadline": "අනාගතය සඳහා බුද්ධිමත් ෆාමසි කළමනාකරණය.",
+    "brandingSubheadline": "ඔබේ සායනික මෙහෙයුම් විධිමත් කරන්න, ඉන්වෙන්ටරි නිරවද්‍යව නිරීක්ෂණය කරන්න, සහ අපගේ මීළඟ පරම්පරාවේ වේදිකාව සමඟ වඩා හොඳ රෝගී සත්කාරයක් ලබා දෙන්න.",
+    "analytics": "තත්කාලීන විශ්ලේෂණ",
+    "secureRecords": "ආරක්ෂිත වාර්තා"
+  },
+  "Theme": {
+    "light": "ආලෝකය",
+    "dark": "අඳුරු",
+    "system": "පද්ධතිය"
+  },
+  "Language": {
+    "en": "ඉංග්‍රීසි",
+    "si": "සිංහල"
+  }
+}
