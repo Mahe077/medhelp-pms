@@ -43,9 +43,31 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "license_number", length = 50)
     private String licenseNumber;
 
+    @Column(name = "user_type", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private com.medhelp.pms.modules.auth_module.domain.value_objects.UserType userType;
+
     @Column(name = "is_active", nullable = false)
     @Builder.Default
     private Boolean isActive = true;
+
+    @Column(name = "is_email_verified", nullable = false)
+    @Builder.Default
+    private Boolean isEmailVerified = false;
+
+    @Column(name = "verification_token", length = 100)
+    private String verificationToken;
+
+    @Column(name = "verification_token_expiry")
+    private LocalDateTime verificationTokenExpiry;
+
+    @Column(name = "preferred_language", length = 10)
+    @Builder.Default
+    private String preferredLanguage = "en";
+
+    @Column(name = "preferred_theme", length = 20)
+    @Builder.Default
+    private String preferredTheme = "system";
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;

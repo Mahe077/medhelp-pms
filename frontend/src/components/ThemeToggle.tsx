@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import { Moon, Sun, Monitor } from "lucide-react";
-import { useTheme } from "next-themes";
+import { usePreferences } from "@/hooks/usePreferences";
 import { Button } from "@/components/ui/Button";
 
 export function ThemeToggle() {
-    const { theme, setTheme } = useTheme();
+    const { currentTheme, updatePreferences } = usePreferences();
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {
@@ -20,28 +20,28 @@ export function ThemeToggle() {
     return (
         <div className="flex items-center gap-1 rounded-full border border-border/50 bg-card/50 p-1 backdrop-blur-md">
             <Button
-                variant={theme === "light" ? "secondary" : "ghost"}
+                variant={currentTheme === "light" ? "secondary" : "ghost"}
                 size="icon"
                 className="h-8 w-8 rounded-full"
-                onClick={() => setTheme("light")}
+                onClick={() => updatePreferences({ theme: "light" })}
                 title="Light Mode"
             >
-                <Sun className="h-4 w-4" />
+                < Sun className="h-4 w-4" />
             </Button>
             <Button
-                variant={theme === "dark" ? "secondary" : "ghost"}
+                variant={currentTheme === "dark" ? "secondary" : "ghost"}
                 size="icon"
                 className="h-8 w-8 rounded-full"
-                onClick={() => setTheme("dark")}
+                onClick={() => updatePreferences({ theme: "dark" })}
                 title="Dark Mode"
             >
                 <Moon className="h-4 w-4" />
             </Button>
             <Button
-                variant={theme === "system" ? "secondary" : "ghost"}
+                variant={currentTheme === "system" ? "secondary" : "ghost"}
                 size="icon"
                 className="h-8 w-8 rounded-full"
-                onClick={() => setTheme("system")}
+                onClick={() => updatePreferences({ theme: "system" })}
                 title="System Preference"
             >
                 <Monitor className="h-4 w-4" />

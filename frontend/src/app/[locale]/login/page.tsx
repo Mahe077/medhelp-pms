@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Mail, Lock, LogIn, Pill, Activity, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -9,42 +9,51 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/Label";
 import { useTranslations } from "next-intl";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { usePathname, useRouter } from "@/i18n/routing";
-import { useParams } from "next/navigation";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useRouter } from "@/i18n/routing";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
     const t = useTranslations("Login");
-    const pathname = usePathname();
     const router = useRouter();
-    const params = useParams();
-    const locale = params.locale as string;
+    const { login } = useAuth();
 
-    const handleLanguageChange = (newLocale: string) => {
-        router.replace(pathname, { locale: newLocale });
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        remember: false
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [id]: type === 'checkbox' ? checked : value
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        try {
+            await login(formData.email, formData.password);
+            router.push("/dashboard");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "Invalid credentials";
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4 sm:p-8">
             {/* Top Controls */}
             <div className="absolute top-4 right-4 z-50 flex items-center gap-4 sm:top-8 sm:right-8">
-                <div className="flex items-center gap-1 rounded-full border border-border/50 bg-card/50 p-1 backdrop-blur-md">
-                    <Button
-                        variant={locale === "en" ? "secondary" : "ghost"}
-                        size="sm"
-                        className="h-8 rounded-full px-3 text-xs font-semibold"
-                        onClick={() => handleLanguageChange("en")}
-                    >
-                        EN
-                    </Button>
-                    <Button
-                        variant={locale === "si" ? "secondary" : "ghost"}
-                        size="sm"
-                        className="h-8 rounded-full px-3 text-xs font-semibold"
-                        onClick={() => handleLanguageChange("si")}
-                    >
-                        සිං
-                    </Button>
-                </div>
+                <LanguageToggle />
                 <ThemeToggle />
             </div>
             {/* Background Decorative Elements */}
@@ -96,68 +105,81 @@ export default function LoginPage() {
                                 {t("description")}
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="email">{t("emailLabel")}</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder={t("emailPlaceholder")}
-                                    icon={<Mail className="h-4 w-4" />}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="password">{t("passwordLabel")}</Label>
+                        <form onSubmit={handleSubmit}>
+                            <CardContent className="space-y-4">
+                                {error && (
+                                    <div className="rounded-lg bg-destructive/10 p-3 text-center text-sm font-medium text-destructive">
+                                        {error}
+                                    </div>
+                                )}
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">{t("emailLabel")}</Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder={t("emailPlaceholder")}
+                                        icon={<Mail className="h-4 w-4" />}
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="password">{t("passwordLabel")}</Label>
+                                        <Link
+                                            href="/forgot-password"
+                                            className="text-xs font-medium text-primary hover:underline underline-offset-4"
+                                        >
+                                            {t("forgotPassword")}
+                                        </Link>
+                                    </div>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        placeholder={t("passwordPlaceholder")}
+                                        icon={<Lock className="h-4 w-4" />}
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id="remember"
+                                        className="h-4 w-4 rounded border-input bg-background/50 text-primary accent-primary outline-none focus:ring-2 focus:ring-primary/50"
+                                        checked={formData.remember}
+                                        onChange={handleChange}
+                                    />
+                                    <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
+                                        {t("rememberMe")}
+                                    </Label>
+                                </div>
+                            </CardContent>
+                            <CardFooter className="flex flex-col space-y-4">
+                                <Button className="w-full text-base font-semibold" size="lg" type="submit" disabled={loading}>
+                                    <LogIn className="mr-2 h-5 w-5" /> {loading ? "Signing in..." : t("signIn")}
+                                </Button>
+                                <div className="relative w-full">
+                                    <div className="absolute inset-0 flex items-center">
+                                        <span className="w-full border-t border-border" />
+                                    </div>
+                                    <div className="relative flex justify-center text-xs uppercase">
+                                        <span className="bg-card px-2 text-muted-foreground">{t("orContinueWith")}</span>
+                                    </div>
+                                </div>
+                                <div className="text-center text-sm text-muted-foreground">
+                                    {t("noAccount")}{" "}
                                     <Link
-                                        href="/forgot-password"
-                                        className="text-xs font-medium text-primary hover:underline underline-offset-4"
+                                        href="/register"
+                                        className="font-medium text-primary hover:underline underline-offset-4"
                                     >
-                                        {t("forgotPassword")}
+                                        {t("requestAccess")}
                                     </Link>
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder={t("passwordPlaceholder")}
-                                    icon={<Lock className="h-4 w-4" />}
-                                    required
-                                />
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    id="remember"
-                                    className="h-4 w-4 rounded border-input bg-background/50 text-primary accent-primary outline-none focus:ring-2 focus:ring-primary/50"
-                                />
-                                <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
-                                    {t("rememberMe")}
-                                </Label>
-                            </div>
-                        </CardContent>
-                        <CardFooter className="flex flex-col space-y-4">
-                            <Button className="w-full text-base font-semibold" size="lg">
-                                <LogIn className="mr-2 h-5 w-5" /> {t("signIn")}
-                            </Button>
-                            <div className="relative w-full">
-                                <div className="absolute inset-0 flex items-center">
-                                    <span className="w-full border-t border-border" />
-                                </div>
-                                <div className="relative flex justify-center text-xs uppercase">
-                                    <span className="bg-card px-2 text-muted-foreground">{t("orContinueWith")}</span>
-                                </div>
-                            </div>
-                            <div className="text-center text-sm text-muted-foreground">
-                                {t("noAccount")}{" "}
-                                <Link
-                                    href="/register"
-                                    className="font-medium text-primary hover:underline underline-offset-4"
-                                >
-                                    {t("requestAccess")}
-                                </Link>
-                            </div>
-                        </CardFooter>
+                            </CardFooter>
+                        </form>
                     </Card>
                 </div>
             </div>

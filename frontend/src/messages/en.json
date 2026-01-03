@@ -18,6 +18,30 @@
     "analytics": "Real-time Analytics",
     "secureRecords": "Secure Records"
   },
+  "Register": {
+    "title": "Create Account",
+    "description": "Join our network of medical excellence.",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Enter your unique ID",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a secure pass-key",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "John",
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Enter contact number",
+    "submit": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "brandingTitle": "MedHelp PMS",
+    "brandingHeadline": "Empowering Care through {span}",
+    "brandingSubheadline": "A streamlined registration for practitioners and clinics.",
+    "secureOnboarding": "Secure Onboarding",
+    "verifyIdentity": "Identity Verification"
+  },
   "Theme": {
     "light": "Light",
     "dark": "Dark",
@@ -26,5 +50,17 @@
   "Language": {
     "en": "English",
     "si": "Sinhala"
+  },
+  "Dashboard": {
+    "overview": "Overview",
+    "patients": "Patients",
+    "medications": "Medications",
+    "prescriptions": "Prescriptions",
+    "inventory": "Inventory",
+    "settings": "Settings",
+    "logout": "Logout",
+    "searchPlaceholder": "Search everything...",
+    "notifications": "Notifications",
+    "markAllRead": "Mark all as read"
   }
 }

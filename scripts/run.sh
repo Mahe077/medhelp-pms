@@ -1,32 +1,42 @@
 #!/usr/bin/env bash
-set -e
 
-# Script to run Spring Boot backend and Next.js frontend for local development
+# MedHelp PMS - Multi-Terminal Development Runner
 # ---------------------------------------------------------------
-# Usage: ./run.sh
-# ---------------------------------------------------------------
+# Launches Backend and Frontend in separate macOS Terminal windows.
 
-# Start the backend (Spring Boot) in the background
-cd ../backend
-if [ -f "./mvnw" ]; then
-  echo "Starting Spring Boot via Maven Wrapper..."
-  ./mvnw spring-boot:run &
-else
-  echo "Starting Spring Boot via Maven..."
-  mvn spring-boot:run &
-fi
-BACKEND_PID=$!
+# Get the absolute path to the project root
+PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
+BACKEND_DIR="$PROJECT_ROOT/backend"
+FRONTEND_DIR="$PROJECT_ROOT/frontend"
 
-# Give the backend a moment to start up (adjust if needed)
-echo "Waiting for backend to become ready..."
-sleep 10
+echo "🚀 Launching MedHelp PMS Development Environment..."
 
-# Start the frontend (Next.js) in the foreground
-cd ../frontend
-echo "Installing frontend dependencies..."
-npm install
-echo "Starting Next.js development server..."
-npm run dev
+# Function to run a command in a new macOS Terminal window
+run_in_new_terminal() {
+    local title=$1
+    local dir=$2
+    local cmd=$3
+    
+    osascript - "$title" "$dir" "$cmd" <<'EOF'
+on run argv
+    set terminalTitle to item 1 of argv
+    set workingDir to item 2 of argv
+    set shellCommand to item 3 of argv
+    tell application "Terminal"
+        set scriptCmd to "cd " & quoted form of workingDir & " && echo -n -e \"\\033]0;\"" & quoted form of terminalTitle & "\"\\007\" && " & shellCommand
+        do script scriptCmd
+        activate
+    end tell
+end run
+EOF
+}
 
-# When the script exits (e.g., Ctrl+C), ensure the backend is stopped
-trap "kill $BACKEND_PID" EXIT
+# 1. Start the Backend
+echo "📦 Starting Spring Boot Backend..."
+run_in_new_terminal "PMS Backend (Spring Boot)" "$BACKEND_DIR" "if [ -f './mvnw' ]; then ./mvnw spring-boot:run; else mvn spring-boot:run; fi"
+
+# 2. Start the Frontend
+echo "🎨 Starting Next.js Frontend..."
+run_in_new_terminal "PMS Frontend (Next.js)" "$FRONTEND_DIR" "npm run dev"
+
+echo "✅ Both services have been launched in separate terminals."

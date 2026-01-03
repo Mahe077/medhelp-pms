@@ -6,9 +6,11 @@ import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.modules.auth_module.domain.entities.UserSession;
 import com.medhelp.pms.modules.auth_module.domain.repositories.AuthRepository;
 import com.medhelp.pms.modules.auth_module.domain.repositories.UserSessionRepository;
+import com.medhelp.pms.modules.auth_module.domain.value_objects.UserType;
 import com.medhelp.pms.shared.domain.exceptions.BusinessException;
 import com.medhelp.pms.shared.infrastructure.security.JwtService;
 import com.medhelp.pms.shared.infrastructure.security.SecurityUtils;
+import com.medhelp.pms.shared.infrastructure.notification.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
+    private final EmailService emailService;
 
     @Value("${jwt.refresh-expiration}")
     private long refreshTokenDuration;
@@ -63,6 +67,21 @@ public class AuthenticationService {
 
             if (!user.getIsActive()) {
                 throw new BusinessException("User account is inactive");
+            }
+
+            // Check email verification for external users
+            if (user.getUserType() == UserType.EXTERNAL
+                    && !user.getIsEmailVerified()) {
+                // Generate new token if needed or just resend
+                String verificationToken = UUID.randomUUID().toString();
+                user.setVerificationToken(verificationToken);
+                user.setVerificationTokenExpiry(LocalDateTime.now().plusHours(24));
+                authRepository.save(user);
+
+                String verificationLink = "http://localhost:3000/en/verify-email?token=" + verificationToken;
+                emailService.sendVerificationEmail(user.getEmail(), verificationLink);
+
+                throw new BusinessException("Email not verified. A new verification link has been sent to your email.");
             }
 
             // Update last login
@@ -205,17 +224,133 @@ public class AuthenticationService {
     }
 
     /**
+     * Register external user
+     */
+    @Transactional
+    public RegisterResponse register(RegisterRequest request) {
+        log.info("Registration attempt for user: {}", request.getUsername());
+
+        if (authRepository.existsByUsername(request.getUsername())) {
+            throw new BusinessException("Username already exists");
+        }
+
+        if (authRepository.existsByEmail(request.getEmail())) {
+            throw new BusinessException("Email already exists");
+        }
+
+        String verificationToken = UUID.randomUUID().toString();
+
+        User user = User.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phone(request.getPhone())
+                .role("USER") // Default role for external users
+                .userType(UserType.EXTERNAL)
+                .isActive(true)
+                .isEmailVerified(false)
+                .verificationToken(verificationToken)
+                .verificationTokenExpiry(LocalDateTime.now().plusHours(24))
+                .build();
+
+        User savedUser = authRepository.save(user);
+
+        String verificationLink = "http://localhost:3000/en/verify-email?token=" + verificationToken;
+        emailService.sendVerificationEmail(savedUser.getEmail(), verificationLink);
+
+        log.info("User registered successfully: {}. Verification token: {}", savedUser.getUsername(),
+                verificationToken);
+
+        return RegisterResponse.builder()
+                .message("Registration successful. Please check your email for verification link.")
+                .user(userMapper.toDto(savedUser))
+                .build();
+    }
+
+    /**
+     * Verify user email
+     */
+    @Transactional
+    public void verifyEmail(String token) {
+        log.info("Email verification attempt with token: {}", token);
+
+        User user = authRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new BusinessException("Invalid or expired verification token"));
+
+        if (user.getVerificationTokenExpiry() != null
+                && user.getVerificationTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new BusinessException("Verification link expired");
+        }
+
+        user.setIsEmailVerified(true);
+        user.setVerificationToken(null);
+        user.setVerificationTokenExpiry(null);
+        authRepository.save(user);
+
+        log.info("Email verified successfully for user: {}", user.getUsername());
+    }
+
+    /**
+     * Resend verification email
+     */
+    @Transactional
+    public void resendVerificationEmail(String email) {
+        User user = authRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException("User not found with email: " + email));
+
+        if (user.getIsEmailVerified()) {
+            throw new BusinessException("Email is already verified");
+        }
+
+        String verificationToken = UUID.randomUUID().toString();
+        user.setVerificationToken(verificationToken);
+        user.setVerificationTokenExpiry(LocalDateTime.now().plusHours(24));
+        authRepository.save(user);
+
+        String verificationLink = "http://localhost:3000/en/verify-email?token=" + verificationToken;
+        emailService.sendVerificationEmail(user.getEmail(), verificationLink);
+
+        log.info("Verification email resent to: {}", email);
+    }
+
+    /**
      * Get current authenticated user
      */
     @Transactional(readOnly = true)
     public UserDto getCurrentUser() {
-        User currentUser = SecurityUtils.getCurrentUser();
+        User currentUser = (User) org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-        if (currentUser == null) {
-            throw new BusinessException("No authenticated user");
+        // Refresh from DB to get latest permissions/data
+        User user = authRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new BusinessException("User not found"));
+
+        return userMapper.toDto(user);
+    }
+
+    /**
+     * Update current user's preferences
+     */
+    @Transactional
+    public UserDto updatePreferences(UserPreferencesRequest request) {
+        User currentUser = (User) org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User user = authRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new BusinessException("User not found"));
+
+        if (request.getPreferredLanguage() != null) {
+            user.setPreferredLanguage(request.getPreferredLanguage());
+        }
+        if (request.getPreferredTheme() != null) {
+            user.setPreferredTheme(request.getPreferredTheme());
         }
 
-        return userMapper.toDto(currentUser);
+        return userMapper.toDto(authRepository.save(user));
     }
 
     /**

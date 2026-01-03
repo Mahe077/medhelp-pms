@@ -9,14 +9,36 @@
     "forgotPassword": "මුරපදය අමතකද?",
     "rememberMe": "දින 30 ක් මාව මතක තබා ගන්න",
     "signIn": "ඇතුල් වන්න",
-    "orContinueWith": "නැතහොත් සමඟ දිගටම කරගෙන යන්න",
-    "noAccount": "ගිණුමක් නැද්ද?",
-    "requestAccess": "ප්‍රවේශය ඉල්ලන්න",
+    "orContinueWith": "නැතහොත් දිගටම කරගෙන වන්න",
+    "noAccount": "ගිණුමක් නොමැතිද?",
+    "requestAccess": "ප්‍රවේශය ඉල්ලන්න"
+  },
+  "Register": {
+    "title": "ගිණුමක් සාදන්න",
+    "description": "අපගේ වෛද්‍ය විශිෂ්ටත්වයේ ජාලයට සම්බන්ධ වන්න.",
+    "usernameLabel": "පරිශීලක නාමය",
+    "usernamePlaceholder": "ඔබගේ සුවිශේෂී හැඳුනුම්පත ඇතුළත් කරන්න",
+    "emailLabel": "විද්‍යුත් තැපැල් ලිපිනය",
+    "emailPlaceholder": "name@example.com",
+    "passwordLabel": "මුරපදය",
+    "passwordPlaceholder": "ආරක්ෂිත මුරපදයක් සාදන්න",
+    "firstNameLabel": "මුල් නම",
+    "firstNamePlaceholder": "ජෝන්",
+    "lastNameLabel": "වාසගම",
+    "lastNamePlaceholder": "ඩෝ",
+    "phoneLabel": "දුරකථන අංකය",
+    "phonePlaceholder": "සම්බන්ධතා අංකය ඇතුළත් කරන්න",
+    "submit": "ගිණුම සාදන්න",
+    "alreadyHaveAccount": "දැනටමත් ගිණුමක් තිබේද?",
+    "signIn": "ඇතුල් වන්න",
     "brandingTitle": "MedHelp PMS",
-    "brandingHeadline": "අනාගතය සඳහා බුද්ධිමත් ෆාමසි කළමනාකරණය.",
-    "brandingSubheadline": "ඔබේ සායනික මෙහෙයුම් විධිමත් කරන්න, ඉන්වෙන්ටරි නිරවද්‍යව නිරීක්ෂණය කරන්න, සහ අපගේ මීළඟ පරම්පරාවේ වේදිකාව සමඟ වඩා හොඳ රෝගී සත්කාරයක් ලබා දෙන්න.",
-    "analytics": "තත්කාලීන විශ්ලේෂණ",
-    "secureRecords": "ආරක්ෂිත වාර්තා"
+    "brandingHeadline": "{span} හරහා සත්කාර සවිබල ගැන්වීම",
+    "brandingSubheadline": "වෛද්‍යවරුන් සහ සායන සඳහා විධිමත් ලියාපදිංචියක්.",
+    "secureOnboarding": "ආරක්ෂිත ඇතුළත් කිරීම",
+    "verifyIdentity": "අනන්‍යතා සත්‍යාපනය",
+    "haveAccount": "දැනටමත් ගිණුමක් තිබේද?",
+    "successMessage": "ලියාපදිංචිය සාර්ථකයි! කරුණාකර ඔබගේ විද්‍යුත් තැපෑල පරීක්ෂා කරන්න.",
+    "goToSignIn": "පුරනය වීමට යන්න"
   },
   "Theme": {
     "light": "ආලෝකය",
@@ -26,5 +48,17 @@
   "Language": {
     "en": "ඉංග්‍රීසි",
     "si": "සිංහල"
+  },
+  "Dashboard": {
+    "overview": "දළ විශ්ලේෂණය",
+    "patients": "රෝගීන්",
+    "medications": "ඖෂධ",
+    "prescriptions": "බෙහෙත් වට්ටෝරු",
+    "inventory": "තොග පාලනය",
+    "settings": "සැකසුම්",
+    "logout": "පිටවන්න",
+    "searchPlaceholder": "සියල්ල සොයන්න...",
+    "notifications": "දැනුම්දීම්",
+    "markAllRead": "සියල්ල කියවූ ලෙස සලකුණු කරන්න"
   }
 }

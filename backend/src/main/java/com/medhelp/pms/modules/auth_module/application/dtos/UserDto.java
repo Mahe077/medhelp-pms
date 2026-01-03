@@ -22,7 +22,11 @@ public class UserDto {
     private String phone;
     private String role;
     private String licenseNumber;
+    private String userType;
     private Boolean isActive;
+    private Boolean isEmailVerified;
+    private String preferredLanguage;
+    private String preferredTheme;
     private LocalDateTime lastLoginAt;
     private Set<String> permissions;
     private LocalDateTime createdAt;
