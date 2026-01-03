@@ -5,7 +5,7 @@ import { QueryProvider } from "@/lib/providers/QueryProvider";
 
 import { AuthInitializer } from "./AuthInitializer";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, enableAuthGuard = true }: { children: React.ReactNode; enableAuthGuard?: boolean }) {
     return (
         <QueryProvider>
             <NextThemesProvider
@@ -14,9 +14,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 enableSystem
                 disableTransitionOnChange
             >
-                <AuthInitializer>
-                    {children}
-                </AuthInitializer>
+                {enableAuthGuard ? (
+                    <AuthInitializer>
+                        {children}
+                    </AuthInitializer>
+                ) : (
+                    children
+                )}
             </NextThemesProvider>
         </QueryProvider>
     );

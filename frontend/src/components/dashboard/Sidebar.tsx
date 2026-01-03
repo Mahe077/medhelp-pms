@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
 import {
     LayoutDashboard,
     Pill,
@@ -84,7 +84,10 @@ const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
             {/* Navigation Items */}
             <nav className="flex-1 space-y-1 p-3 overflow-y-auto">
                 {navItems.map((item) => {
-                    const isActive = pathname.includes(item.href);
+                    const isActive = item.href === "/dashboard"
+                        ? pathname === "/dashboard"
+                        : pathname.startsWith(item.href);
+
                     return (
                         <Link
                             key={item.href}

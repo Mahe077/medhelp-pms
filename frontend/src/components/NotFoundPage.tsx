@@ -1,13 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Pill, Home, MoveLeft, HelpCircle } from "lucide-react";
 import { getButtonClasses } from "@/components/ui/Button";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 export function NotFoundContent({ locale }: { locale: string }) {
+    const t = useTranslations("NotFound");
+
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-6">
+            {/* Top Right Controls */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-50">
+                <LanguageToggle />
+                <ThemeToggle />
+            </div>
+
             {/* Background Decorative Blobs */}
             <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-primary/5 blur-[120px] animate-pulse" />
             <div className="absolute bottom-[-10%] right-[-10%] h-[400px] w-[400px] rounded-full bg-chart-1/5 blur-[100px] animate-pulse delay-700" />
@@ -29,10 +39,10 @@ export function NotFoundContent({ locale }: { locale: string }) {
                 {/* Text Content */}
                 <div className="max-w-md space-y-4">
                     <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-                        Prescription Missing
+                        {t('title')}
                     </h2>
                     <p className="text-lg text-muted-foreground">
-                        The page or record you are looking for has either been moved, deleted, or never existed in our pharmacy records.
+                        {t('description')}
                     </p>
                 </div>
 
@@ -43,14 +53,14 @@ export function NotFoundContent({ locale }: { locale: string }) {
                         className={getButtonClasses("primary", "lg", "rounded-full px-8 shadow-lg shadow-primary/20")}
                     >
                         <Home className="mr-2 h-4 w-4" />
-                        Return to Dashboard
+                        {t('backToDashboard')}
                     </Link>
                     <Link
                         href={`/${locale}/help`}
                         className={getButtonClasses("outline", "lg", "rounded-full px-8 backdrop-blur-sm")}
                     >
                         <HelpCircle className="mr-2 h-4 w-4" />
-                        Contact Support
+                        {t('contactSupport')}
                     </Link>
                 </div>
 
@@ -60,7 +70,7 @@ export function NotFoundContent({ locale }: { locale: string }) {
                     className="mt-8 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                     <MoveLeft className="h-4 w-4" />
-                    Go back to previous page
+                    {t('goBack')}
                 </button>
             </div>
 
@@ -73,6 +83,15 @@ export function NotFoundContent({ locale }: { locale: string }) {
 }
 
 export function NotFoundPage() {
+    // We don't need useLocale here anymore if purely client-side rendering the content, 
+    // but keeping it consistent with the previous structure.
+    // However, for Next-Intl clientside, we usually wrap in NextIntlClientProvider or similar if not already.
+    // Assuming the parent layout provides it. UseTranslations hook works inside the provider.
+    // We just pass locale for the link generation.
+    // Actually useTranslations needs to run inside a component that is under the provider.
+    // If NotFoundPage is rendered by root global-error or not-found, it might miss provider.
+    // But let's stick to the request.
     const locale = useLocale();
+
     return <NotFoundContent locale={locale} />;
 }
