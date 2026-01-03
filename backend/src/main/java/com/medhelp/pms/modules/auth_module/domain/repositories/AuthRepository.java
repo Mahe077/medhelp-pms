@@ -1,0 +1,26 @@
+package com.medhelp.pms.modules.auth_module.domain.repositories;
+
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface AuthRepository extends JpaRepository<User, UUID> {
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+
+    @Query("SELECT u FROM User u WHERE  u.username = :usernameOrEmail OR u.email = :usernameOrEmail")
+    Optional<User> findByUsernameOrEmail(String usernameOrEmail);
+
+    @Query("SELECT u FROM User u WHERE u.isActive = true and u.username = :username")
+    Optional<User> findActiveByUsername(String username);
+}

@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -23,7 +23,7 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @CreatedBy
     @Column(name = "created_by")
@@ -31,14 +31,14 @@ public abstract class BaseEntity {
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @LastModifiedBy
     @Column(name = "updated_by")
     private UUID updatedBy;
 
     @Column(name = "deleted_at")
-    private OffsetDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
     @Version
     @Column(name = "version")
@@ -49,6 +49,6 @@ public abstract class BaseEntity {
     }
 
     public void softDeleted() {
-        this.deletedAt = OffsetDateTime.now();
+        this.deletedAt = LocalDateTime.now();
     }
 }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -53,10 +53,10 @@ public class Notification {
     private String status;
 
     @Column(name = "sent_at")
-    private OffsetDateTime sentAt;
+    private LocalDateTime sentAt;
 
     @Column(name = "delivered_at")
-    private OffsetDateTime deliveredAt;
+    private LocalDateTime deliveredAt;
 
     @Size(max = 255)
     @Column(name = "external_id")
@@ -82,6 +82,6 @@ public class Notification {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
 }

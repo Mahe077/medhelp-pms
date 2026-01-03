@@ -1,6 +1,6 @@
 package com.medhelp.pms.modules.inventory_module.domain.entities;
 
-import com.medhelp.pms.modules.billing_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -59,7 +59,7 @@ public class InventoryTransaction {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "transaction_date")
-    private OffsetDateTime transactionDate;
+    private LocalDateTime transactionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performed_by")
@@ -67,6 +67,6 @@ public class InventoryTransaction {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
 }

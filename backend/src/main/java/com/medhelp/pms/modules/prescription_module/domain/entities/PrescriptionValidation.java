@@ -1,6 +1,6 @@
 package com.medhelp.pms.modules.prescription_module.domain.entities;
 
-import com.medhelp.pms.modules.billing_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.shared.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,9 +13,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -43,7 +42,7 @@ public class PrescriptionValidation extends BaseEntity {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "performed_at")
-    private OffsetDateTime performedAt;
+    private LocalDateTime performedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performed_by")

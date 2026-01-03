@@ -1,4 +1,4 @@
-package com.medhelp.pms.modules.identity_module.domain.entities;
+package com.medhelp.pms.modules.auth_module.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,6 +31,6 @@ public class RolePermission {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
 }

@@ -1,4 +1,4 @@
-package com.medhelp.pms.shared.infrastructure.api;
+package com.medhelp.pms.shared.api.validators;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

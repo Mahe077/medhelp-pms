@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -58,6 +58,6 @@ public class InvoiceItem {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
 }

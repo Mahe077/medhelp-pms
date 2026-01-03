@@ -1,5 +1,7 @@
 package com.medhelp.pms.modules.billing_module.domain.entities;
 
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,7 +13,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -66,7 +68,7 @@ public class PricingRule {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")

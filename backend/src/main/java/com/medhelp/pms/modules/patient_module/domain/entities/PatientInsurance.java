@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -75,10 +75,10 @@ public class PatientInsurance {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
 }

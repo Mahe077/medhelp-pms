@@ -1,6 +1,6 @@
 package com.medhelp.pms.modules.prescription_module.domain.entities;
 
-import com.medhelp.pms.modules.billing_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.shared.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -77,28 +77,28 @@ public class Prescription extends BaseEntity {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "received_at")
-    private OffsetDateTime receivedAt;
+    private LocalDateTime receivedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "received_by")
     private User receivedBy;
 
     @Column(name = "validated_at")
-    private OffsetDateTime validatedAt;
+    private LocalDateTime validatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "validated_by")
     private User validatedBy;
 
     @Column(name = "filled_at")
-    private OffsetDateTime filledAt;
+    private LocalDateTime filledAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "filled_by")
     private User filledBy;
 
     @Column(name = "dispensed_at")
-    private OffsetDateTime dispensedAt;
+    private LocalDateTime dispensedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dispensed_by")

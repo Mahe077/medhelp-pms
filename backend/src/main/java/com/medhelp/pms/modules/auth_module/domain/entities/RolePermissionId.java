@@ -1,4 +1,4 @@
-package com.medhelp.pms.modules.identity_module.domain.entities;
+package com.medhelp.pms.modules.auth_module.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Setter
 @Embeddable
 public class RolePermissionId implements Serializable {
+    @Serial
     private static final long serialVersionUID = -113469378206307458L;
     @NotNull
     @Column(name = "role_id", nullable = false)

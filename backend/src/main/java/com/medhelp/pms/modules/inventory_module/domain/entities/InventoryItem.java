@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -70,15 +70,15 @@ public class InventoryItem {
     private Boolean isActive;
 
     @Column(name = "last_counted_at")
-    private OffsetDateTime lastCountedAt;
+    private LocalDateTime lastCountedAt;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @ColumnDefault("1")
     @Column(name = "version")

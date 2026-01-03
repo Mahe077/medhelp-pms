@@ -1,6 +1,6 @@
 package com.medhelp.pms.modules.inventory_module.domain.entities;
 
-import com.medhelp.pms.modules.billing_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,7 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -62,6 +62,6 @@ public class InventoryBatch {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
 }

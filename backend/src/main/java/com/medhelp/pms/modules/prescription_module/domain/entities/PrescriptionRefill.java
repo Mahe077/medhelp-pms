@@ -1,20 +1,17 @@
 package com.medhelp.pms.modules.prescription_module.domain.entities;
 
-import com.medhelp.pms.modules.billing_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.shared.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
