@@ -10,40 +10,45 @@ import { Label } from "@/components/ui/Label";
 import { useTranslations } from "next-intl";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageToggle } from "@/components/LanguageToggle";
-import { useRouter } from "@/i18n/routing";
-import { useAuth } from "@/hooks/useAuth";
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useLogin } from "@/lib/api/auth";
+import { useForm } from "react-hook-form";
+import { toast } from 'sonner';
+
+const loginSchema = z.object({
+    usernameOrEmail: z.string().min(3, 'Username must be at least 3 characters'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
     const t = useTranslations("Login");
-    const router = useRouter();
-    const { login } = useAuth();
 
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        remember: false
+    const login = useLogin();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
     });
+
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [serverError, setServerError] = useState<string | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [id]: type === 'checkbox' ? checked : value
-        });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = async (data: LoginFormData) => {
+        setServerError(null);
         setLoading(true);
-        setError(null);
         try {
-            await login(formData.email, formData.password);
-            router.push("/dashboard");
-        } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : "Invalid credentials";
-            setError(message);
+            await login.mutateAsync(data);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Invalid credentials";
+            toast.error(message);
+            setServerError(message);
         } finally {
             setLoading(false);
         }
@@ -105,22 +110,20 @@ export default function LoginPage() {
                                 {t("description")}
                             </CardDescription>
                         </CardHeader>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             <CardContent className="space-y-4">
-                                {error && (
+                                {serverError && (
                                     <div className="rounded-lg bg-destructive/10 p-3 text-center text-sm font-medium text-destructive">
-                                        {error}
+                                        {serverError}
                                     </div>
                                 )}
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">{t("emailLabel")}</Label>
+                                    <Label htmlFor="usernameOrEmail">{t("usernameLabel")}</Label>
                                     <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder={t("emailPlaceholder")}
+                                        {...register('usernameOrEmail')}
+                                        id="usernameOrEmail"
+                                        placeholder={t("usernamePlaceholder")}
                                         icon={<Mail className="h-4 w-4" />}
-                                        value={formData.email}
-                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
@@ -135,26 +138,25 @@ export default function LoginPage() {
                                         </Link>
                                     </div>
                                     <Input
+                                        {...register('password')}
                                         id="password"
                                         type="password"
                                         placeholder={t("passwordPlaceholder")}
                                         icon={<Lock className="h-4 w-4" />}
-                                        value={formData.password}
-                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id="remember"
-                                        className="h-4 w-4 rounded border-input bg-background/50 text-primary accent-primary outline-none focus:ring-2 focus:ring-primary/50"
-                                        checked={formData.remember}
-                                        onChange={handleChange}
-                                    />
-                                    <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
-                                        {t("rememberMe")}
-                                    </Label>
+                                    {/*    <input*/}
+                                    {/*        type="checkbox"*/}
+                                    {/*        id="remember"*/}
+                                    {/*        className="h-4 w-4 rounded border-input bg-background/50 text-primary accent-primary outline-none focus:ring-2 focus:ring-primary/50"*/}
+                                    {/*        checked={formData.remember}*/}
+                                    {/*        onChange={handleChange}*/}
+                                    {/*    />*/}
+                                    {/*    <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">*/}
+                                    {/*        {t("rememberMe")}*/}
+                                    {/*    </Label>*/}
                                 </div>
                             </CardContent>
                             <CardFooter className="flex flex-col space-y-4">
@@ -175,7 +177,7 @@ export default function LoginPage() {
                                         href="/register"
                                         className="font-medium text-primary hover:underline underline-offset-4"
                                     >
-                                        {t("requestAccess")}
+                                        {t("signup")}
                                     </Link>
                                 </div>
                             </CardFooter>

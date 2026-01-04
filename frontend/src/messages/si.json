@@ -2,6 +2,8 @@
   "Login": {
     "title": "නැවත සාදරයෙන් පිළිගනිමු",
     "description": "ඔබේ උපකරණ පුවරුවට පිවිසීමට ඔබේ අක්තපත්‍ර ඇතුළත් කරන්න",
+    "usernameLabel": "පරිශීලක නාමය",
+    "usernamePlaceholder": "නාමය",
     "emailLabel": "විද්‍යුත් තැපැල් ලිපිනය",
     "emailPlaceholder": "name@pharmacy.com",
     "passwordLabel": "මුරපදය",
@@ -11,7 +13,7 @@
     "signIn": "ඇතුල් වන්න",
     "orContinueWith": "නැතහොත් දිගටම කරගෙන වන්න",
     "noAccount": "ගිණුමක් නොමැතිද?",
-    "requestAccess": "ප්‍රවේශය ඉල්ලන්න"
+    "signup": "ගිණුමක් සාදන්න"
   },
   "Register": {
     "title": "ගිණුමක් සාදන්න",
@@ -60,5 +62,12 @@
     "searchPlaceholder": "සියල්ල සොයන්න...",
     "notifications": "දැනුම්දීම්",
     "markAllRead": "සියල්ල කියවූ ලෙස සලකුණු කරන්න"
+  },
+  "NotFound": {
+    "title": "පිටුව හමු නොවීය",
+    "description": "ඔබ සොයන පිටුව හෝ වාර්තාව අපගේ පද්ධතියේ නොමැත, නැතහොත් එය මකා දමා තිබිය හැක.",
+    "backToDashboard": "මුල් පිටුවට",
+    "contactSupport": "සහය ලබා ගන්න",
+    "goBack": "ආපසු යන්න"
   }
 }

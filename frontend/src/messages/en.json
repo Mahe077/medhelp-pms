@@ -2,6 +2,8 @@
   "Login": {
     "title": "Welcome Back",
     "description": "Enter your credentials to access your dashboard",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Devon",
     "emailLabel": "Email Address",
     "emailPlaceholder": "name@pharmacy.com",
     "passwordLabel": "Password",
@@ -11,7 +13,7 @@
     "signIn": "Sign In",
     "orContinueWith": "Or continue with",
     "noAccount": "Don't have an account?",
-    "requestAccess": "Request Access",
+    "signup": "Sign Up",
     "brandingTitle": "MedHelp PMS",
     "brandingHeadline": "Intelligent Pharmacy Management for the Future.",
     "brandingSubheadline": "Streamline your clinical operations, track inventory with precision, and provide better patient care with our next-gen platform.",
@@ -62,5 +64,12 @@
     "searchPlaceholder": "Search everything...",
     "notifications": "Notifications",
     "markAllRead": "Mark all as read"
+  },
+  "NotFound": {
+    "title": "Prescription Missing",
+    "description": "The page or record you are looking for has either been moved, deleted, or never existed in our pharmacy records.",
+    "backToDashboard": "Return to Dashboard",
+    "contactSupport": "Contact Support",
+    "goBack": "Go back to previous page"
   }
 }
