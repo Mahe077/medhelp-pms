@@ -26,25 +26,28 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
 
     // If 401 and we haven't retried yet
-    try {
-      const refreshToken = localStorage.getItem("accessToken");
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-        { refreshToken }
-      );
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+          { refreshToken }
+        );
 
-      const { accessToken } = response.data.data;
-      localStorage.setItem("accessToken", accessToken);
+        const { accessToken } = response.data.data;
+        localStorage.setItem("accessToken", accessToken);
 
-      //Retry original request
-      originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-      return apiClient(originalRequest);
-    } catch (refreshError) {
-      // Redirect to login
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      window.location.href = "/login";
-      return Promise.reject(refreshError);
+        //Retry original request
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        // Redirect to login
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
     return Promise.reject(error);
   }

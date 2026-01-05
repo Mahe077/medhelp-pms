@@ -1,7 +1,9 @@
 package com.medhelp.pms.modules.prescription_module.domain.entities;
 
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
+import com.medhelp.pms.modules.prescription_module.domain.value_objects.PrescriptionStatus;
 import com.medhelp.pms.shared.domain.BaseEntity;
+import com.medhelp.pms.shared.domain.exceptions.BusinessException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -69,11 +71,10 @@ public class Prescription extends BaseEntity {
     @Column(name = "external_rx_number", length = 50)
     private String externalRxNumber;
 
-    @Size(max = 50)
-    @NotNull
+    @Enumerated(EnumType.STRING)
     @ColumnDefault("'received'")
     @Column(name = "status", nullable = false, length = 50)
-    private String status;
+    private PrescriptionStatus status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "received_at")
@@ -125,4 +126,19 @@ public class Prescription extends BaseEntity {
 
     @Column(name = "rejection_reason", length = Integer.MAX_VALUE)
     private String rejectionReason;
+
+    // Business methods
+    public void validate() {
+        if (status != PrescriptionStatus.RECEIVED) {
+            throw new BusinessException("Cannot validate prescription in status: " + status);
+        }
+        this.status = PrescriptionStatus.VALIDATED;
+    }
+
+    public void fill() {
+        if (status != PrescriptionStatus.VALIDATED) {
+            throw new BusinessException("Cannot fill unvalidated prescription");
+        }
+        this.status = PrescriptionStatus.FILLED;
+    }
 }

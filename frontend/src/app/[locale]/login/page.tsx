@@ -45,8 +45,9 @@ export default function LoginPage() {
         setLoading(true);
         try {
             await login.mutateAsync(data);
-        } catch (error: unknown) {
-            const message = error instanceof Error ? error.message : "Invalid credentials";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            const message = error.response?.data?.error?.message || "Invalid credentials";
             toast.error(message);
             setServerError(message);
         } finally {

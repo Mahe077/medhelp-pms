@@ -1,18 +1,13 @@
 package com.medhelp.pms.modules.auth_module.api.controllers;
 
-import com.medhelp.pms.modules.auth_module.application.dtos.AuthResponse;
-import com.medhelp.pms.modules.auth_module.application.dtos.LoginRequest;
-import com.medhelp.pms.modules.auth_module.application.dtos.RegisterRequest;
-import com.medhelp.pms.modules.auth_module.application.dtos.RegisterResponse;
-import com.medhelp.pms.modules.auth_module.application.dtos.UserDto;
+import com.medhelp.pms.modules.auth_module.application.dtos.*;
 import com.medhelp.pms.modules.auth_module.domain.services.AuthenticationService;
 import com.medhelp.pms.shared.api.validators.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.medhelp.pms.modules.auth_module.application.dtos.UserPreferencesRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,6 +27,38 @@ public class AuthController {
     public ResponseEntity<ApiResponse<RegisterResponse>> register(@RequestBody RegisterRequest registerRequest) {
         RegisterResponse response = authService.register(registerRequest);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "Refresh token", description = "Get new access token using refresh token")
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(
+            @RequestBody @Valid RefreshTokenRequest request
+    ) {
+        RefreshTokenResponse response = authService.refreshToken(request);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Logout", description = "Logout current user and revoke refresh token")
+    public ResponseEntity<ApiResponse<Void>> logout() {
+        authService.logout();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/logout-all")
+    @Operation(summary = "Logout from all devices", description = "Revoke all refresh tokens for current user")
+    public ResponseEntity<ApiResponse<Void>> logoutFromAllDevices() {
+        authService.logoutFromAllDevices();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/change-password")
+    @Operation(summary = "Change password", description = "Change password for current user")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @RequestBody @Valid ChangePasswordRequest request
+    ) {
+        authService.changePassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PostMapping("/verify-email")
