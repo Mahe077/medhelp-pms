@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "./client";
 import { CreatePatientRequest } from "@/lib/interfaces/patient";
+import { toast } from "sonner";
 
 export function usePatients(params?: {
   page?: number;
@@ -36,7 +37,13 @@ export function useCreatePatient() {
       return response.data.data;
     },
     onSuccess: () => {
+      toast.success("Patient created successfully");
       queryClient.invalidateQueries({ queryKey: ["patients"] });
+    },
+    onError: (error: any) => {
+      const message =
+        error.response?.data?.error?.message || "Failed to create patient";
+      toast.error(message);
     },
   });
 }
@@ -50,8 +57,14 @@ export function useUpdatePatient(id: string) {
       return response.data.data;
     },
     onSuccess: () => {
+      toast.success("Patient updated successfully");
       queryClient.invalidateQueries({ queryKey: ["patients"] });
       queryClient.invalidateQueries({ queryKey: ["patients", id] });
+    },
+    onError: (error: any) => {
+      const message =
+        error.response?.data?.error?.message || "Failed to update patient";
+      toast.error(message);
     },
   });
 }

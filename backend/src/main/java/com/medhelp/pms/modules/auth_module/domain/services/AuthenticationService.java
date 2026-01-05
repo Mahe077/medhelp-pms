@@ -4,9 +4,11 @@ import com.medhelp.pms.modules.auth_module.application.dtos.*;
 import com.medhelp.pms.modules.auth_module.application.mappers.UserMapper;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.modules.auth_module.domain.entities.UserSession;
+import com.medhelp.pms.modules.auth_module.domain.events.UserLoggedInEvent;
 import com.medhelp.pms.modules.auth_module.domain.repositories.AuthRepository;
 import com.medhelp.pms.modules.auth_module.domain.repositories.UserSessionRepository;
 import com.medhelp.pms.modules.auth_module.domain.value_objects.UserType;
+import com.medhelp.pms.shared.domain.events.DomainEventPublisher;
 import com.medhelp.pms.shared.domain.exceptions.BusinessException;
 import com.medhelp.pms.shared.infrastructure.security.JwtService;
 import com.medhelp.pms.shared.infrastructure.security.SecurityUtils;
@@ -41,6 +43,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
     private final EmailService emailService;
+    private final DomainEventPublisher eventPublisher;
 
     @Value("${jwt.refresh-expiration}")
     private long refreshTokenDuration;
@@ -94,6 +97,28 @@ public class AuthenticationService {
 
             // Save refresh token
             saveUserSession(user, refreshToken);
+
+            // Get request info for event
+            HttpServletRequest httpRequest = getCurrentHttpRequest();
+            String ipAddress = getClientIp(httpRequest);
+            String userAgent = httpRequest != null ? httpRequest.getHeader("User-Agent") : null;
+
+            // Publish UserLoggedIn event
+            UserLoggedInEvent.UserLoggedInData eventData = UserLoggedInEvent.UserLoggedInData.builder()
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .userType(user.getUserType().name())
+                    .role(user.getRole())
+                    .ipAddress(ipAddress)
+                    .userAgent(userAgent)
+                    .loginAt(LocalDateTime.now())
+                    .sessionId(refreshToken.substring(0, Math.min(8, refreshToken.length())))
+                    .rememberMe(false)
+                    .build();
+
+            eventPublisher.publish(new UserLoggedInEvent(
+                    user.getId().toString(),
+                    eventData));
 
             log.info("User logged in successfully: {}", user.getUsername());
 

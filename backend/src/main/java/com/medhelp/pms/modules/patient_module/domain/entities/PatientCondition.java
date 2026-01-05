@@ -1,6 +1,7 @@
 package com.medhelp.pms.modules.patient_module.domain.entities;
 
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
+import com.medhelp.pms.shared.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,12 +19,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "patient_conditions", schema = "patient_schema")
-public class PatientCondition {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private UUID id;
-
+public class PatientCondition extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "patient_id")
@@ -47,13 +43,4 @@ public class PatientCondition {
 
     @Column(name = "notes", length = Integer.MAX_VALUE)
     private String notes;
-
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    private User createdBy;
-
 }

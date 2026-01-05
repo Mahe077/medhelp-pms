@@ -8,7 +8,6 @@ import com.medhelp.pms.modules.auth_module.domain.repositories.AuthRepository;
 import com.medhelp.pms.modules.auth_module.domain.repositories.UserSessionRepository;
 import com.medhelp.pms.modules.auth_module.domain.value_objects.UserType;
 import com.medhelp.pms.shared.infrastructure.security.JwtService;
-import com.medhelp.pms.shared.infrastructure.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
