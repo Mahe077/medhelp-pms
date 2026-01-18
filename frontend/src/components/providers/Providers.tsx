@@ -3,6 +3,7 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { QueryProvider } from "@/lib/providers/QueryProvider";
 
+import { Toaster } from "@/components/ui/sonner";
 import { AuthInitializer } from "./AuthInitializer";
 
 export function Providers({ children, enableAuthGuard = true }: { children: React.ReactNode; enableAuthGuard?: boolean }) {
@@ -21,6 +22,7 @@ export function Providers({ children, enableAuthGuard = true }: { children: Reac
                 ) : (
                     children
                 )}
+                <Toaster />
             </NextThemesProvider>
         </QueryProvider>
     );
