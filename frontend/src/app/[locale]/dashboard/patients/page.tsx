@@ -1,14 +1,8 @@
 "use client"
 
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { PlusCircle, Printer } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-import { Patient } from '@/lib/interfaces/patient';
+import { PlusCircle } from 'lucide-react';
+import { useState } from 'react';
 import { usePatients } from '@/lib/api/patients';
 import CreatePatientDialog from '@/components/patients/create-patient-dialog';
 import { PatientTable } from '@/components/patients/patient-table';
