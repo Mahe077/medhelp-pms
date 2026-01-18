@@ -1,7 +1,7 @@
 package com.medhelp.pms.modules.patient_module.domain.entities;
 
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
-import com.medhelp.pms.shared.domain.BaseEntity;
+import com.medhelp.pms.shared.domain.entities.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

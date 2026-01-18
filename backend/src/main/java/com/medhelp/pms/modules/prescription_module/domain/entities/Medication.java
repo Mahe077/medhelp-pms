@@ -1,6 +1,6 @@
 package com.medhelp.pms.modules.prescription_module.domain.entities;
 
-import com.medhelp.pms.shared.domain.BaseEntity;
+import com.medhelp.pms.shared.domain.entities.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

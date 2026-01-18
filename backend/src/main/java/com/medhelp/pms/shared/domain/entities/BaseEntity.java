@@ -1,4 +1,4 @@
-package com.medhelp.pms.shared.domain;
+package com.medhelp.pms.shared.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

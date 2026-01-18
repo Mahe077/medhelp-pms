@@ -2,7 +2,7 @@ package com.medhelp.pms.modules.prescription_module.domain.entities;
 
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.modules.prescription_module.domain.value_objects.PrescriptionStatus;
-import com.medhelp.pms.shared.domain.BaseEntity;
+import com.medhelp.pms.shared.domain.entities.BaseEntity;
 import com.medhelp.pms.shared.domain.exceptions.BusinessException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

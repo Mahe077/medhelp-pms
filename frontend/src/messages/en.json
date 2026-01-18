@@ -63,7 +63,8 @@
     "logout": "Logout",
     "searchPlaceholder": "Search everything...",
     "notifications": "Notifications",
-    "markAllRead": "Mark all as read"
+    "markAllRead": "Mark all as read",
+    "access": "Access"
   },
   "NotFound": {
     "title": "Prescription Missing",
@@ -71,5 +72,172 @@
     "backToDashboard": "Return to Dashboard",
     "contactSupport": "Contact Support",
     "goBack": "Go back to previous page"
+  },
+  "Settings": {
+    "title": "Settings",
+    "description": "Manage your account settings and preferences.",
+    "tabs": {
+      "profile": "Profile",
+      "security": "Security",
+      "notifications": "Notifications",
+      "preferences": "Preferences",
+      "auditTrail": "Audit Trail"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "description": "Manage your personal information and professional details.",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "licenseNumber": "License Number",
+      "role": "Role",
+      "userType": "User Type",
+      "emailVerified": "Email Verified",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "verified": "Verified",
+      "notVerified": "Not Verified",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "updateSuccess": "Profile updated successfully",
+      "updateError": "Failed to update profile"
+    },
+    "security": {
+      "title": "Security Settings",
+      "description": "Manage your password and security preferences.",
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "passwordRequirements": "Password must be at least 8 characters",
+      "passwordsMatch": "Passwords must match",
+      "changePasswordButton": "Change Password",
+      "changing": "Changing...",
+      "passwordChangeSuccess": "Password changed successfully",
+      "passwordChangeError": "Failed to change password",
+      "incorrectPassword": "Current password is incorrect",
+      "activeSessions": "Active Sessions",
+      "lastLogin": "Last Login"
+    },
+    "notifications": {
+      "title": "Notification Preferences",
+      "description": "Manage how you receive notifications.",
+      "general": "General Notifications",
+      "emailNotifications": "Email Notifications",
+      "smsNotifications": "SMS Notifications",
+      "pushNotifications": "Push Notifications",
+      "prescriptions": "Prescription Notifications",
+      "prescriptionReadyEmail": "Prescription Ready (Email)",
+      "prescriptionReadySms": "Prescription Ready (SMS)",
+      "prescriptionReadyPush": "Prescription Ready (Push)",
+      "refills": "Refill Reminders",
+      "refillReminderEmail": "Refill Reminder (Email)",
+      "refillReminderSms": "Refill Reminder (SMS)",
+      "refillReminderPush": "Refill Reminder (Push)",
+      "refillDaysBefore": "Days Before Refill",
+      "marketing": "Marketing & Promotional",
+      "marketingEmails": "Marketing Emails",
+      "promotionalSms": "Promotional SMS",
+      "system": "System Notifications",
+      "systemAlertsEmail": "System Alerts (Email)",
+      "systemAlertsPush": "System Alerts (Push)",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "updateSuccess": "Notification preferences updated successfully",
+      "updateError": "Failed to update notification preferences"
+    },
+    "preferences": {
+      "title": "User Preferences",
+      "description": "Customize your experience.",
+      "language": "Language",
+      "selectLanguage": "Select Language",
+      "english": "English",
+      "sinhala": "සිංහල",
+      "theme": "Theme",
+      "selectTheme": "Select Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "updateSuccess": "Preferences updated successfully",
+      "updateError": "Failed to update preferences"
+    },
+    "auditTrail": {
+      "title": "Audit Trail",
+      "description": "View history of all changes to your settings.",
+      "noRecords": "No audit records found",
+      "loading": "Loading audit trail...",
+      "changedBy": "Changed By",
+      "changedAt": "Changed At",
+      "settingChanged": "Setting Changed",
+      "oldValue": "Old Value",
+      "newValue": "New Value",
+      "loadMore": "Load More",
+      "page": "Page"
+    },
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirm": "Confirm",
+      "loading": "Loading...",
+      "error": "An error occurred",
+      "success": "Success"
+    }
+  },
+  "Access": {
+    "title": "Access",
+    "description": "Manage access to the system.",
+    "tabs": {
+      "users": "Users",
+      "roles": "Roles",
+      "permissions": "Permissions",
+      "auditTrail": "Audit Trail"
+    },
+    "users": {
+      "title": "Users",
+      "description": "Manage users.",
+      "noUsers": "No users found",
+      "loading": "Loading users..."
+    },
+    "roles": {
+      "title": "Roles",
+      "description": "Manage roles.",
+      "noRoles": "No roles found",
+      "loading": "Loading roles..."
+    },
+    "permissions": {
+      "title": "Permissions",
+      "description": "Manage permissions.",
+      "noPermissions": "No permissions found",
+      "loading": "Loading permissions..."
+    },
+    "auditTrail": {
+      "title": "Audit Trail",
+      "description": "View history of all changes to your settings.",
+      "noRecords": "No audit records found",
+      "loading": "Loading audit trail...",
+      "changedBy": "Changed By",
+      "changedAt": "Changed At",
+      "settingChanged": "Setting Changed",
+      "oldValue": "Old Value",
+      "newValue": "New Value",
+      "loadMore": "Load More",
+      "page": "Page"
+    },
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirm": "Confirm",
+      "loading": "Loading...",
+      "error": "An error occurred",
+      "success": "Success"
+    }
   }
 }

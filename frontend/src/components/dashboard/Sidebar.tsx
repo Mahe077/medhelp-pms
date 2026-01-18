@@ -12,7 +12,9 @@ import {
     ChevronLeft,
     ChevronRight,
     ClipboardList,
-    Package
+    Package,
+    Accessibility,
+    Lock
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -61,9 +63,9 @@ const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
             href: "/dashboard/settings",
         },
         {
-            title: t("users"),
-            icon: Users,
-            href: "/dashboard/users",
+            title: t("access"),
+            icon: Lock,
+            href: "/dashboard/access",
         }
     ];
 

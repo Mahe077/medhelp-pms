@@ -1,6 +1,6 @@
 package com.medhelp.pms.modules.auth_module.domain.entities;
 
-import com.medhelp.pms.shared.domain.BaseEntity;
+import com.medhelp.pms.shared.domain.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
