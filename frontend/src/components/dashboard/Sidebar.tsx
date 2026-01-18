@@ -60,6 +60,11 @@ const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
             icon: Settings,
             href: "/dashboard/settings",
         },
+        {
+            title: t("users"),
+            icon: Users,
+            href: "/dashboard/users",
+        }
     ];
 
     return (
