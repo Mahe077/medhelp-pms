@@ -11,7 +11,7 @@ export function useLogin() {
     mutationFn: async (credentials: LoginRequest) => {
       const response = await apiClient.post<{ data: LoginResponse }>(
         "/auth/login",
-        credentials
+        credentials,
       );
       return response.data.data;
     },
@@ -44,7 +44,7 @@ export function useCurrentUser() {
   return useQuery({
     queryKey: ["currentUser"],
     queryFn: async () => {
-      const response = await apiClient.get("/users/me");
+      const response = await apiClient.get("/auth/me");
       return response.data.data;
     },
     enabled: isAuthenticated && !user,
