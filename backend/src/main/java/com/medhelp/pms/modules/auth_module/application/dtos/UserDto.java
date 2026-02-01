@@ -20,7 +20,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String phone;
-    private String role;
+    private Set<String> roles;
     private String licenseNumber;
     private String userType;
     private Boolean isActive;

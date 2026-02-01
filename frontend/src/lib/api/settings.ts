@@ -69,14 +69,14 @@ export interface PageResponse<T> {
 
 // Profile Settings
 export const getProfileSettings = async (): Promise<ProfileSettings> => {
-  const response = await apiClient.get("/api/settings/profile");
+  const response = await apiClient.get("/settings/profile");
   return response.data;
 };
 
 export const updateProfileSettings = async (
   data: Partial<ProfileSettings>,
 ): Promise<ProfileSettings> => {
-  const response = await apiClient.put("/api/settings/profile", data);
+  const response = await apiClient.put("/settings/profile", data);
   return response.data;
 };
 
@@ -84,33 +84,33 @@ export const updateProfileSettings = async (
 export const changePassword = async (
   data: PasswordChangeRequest,
 ): Promise<void> => {
-  await apiClient.put("/api/settings/security/password", data);
+  await apiClient.put("/settings/security/password", data);
 };
 
 // Notification Preferences
 export const getNotificationPreferences =
   async (): Promise<NotificationPreferences> => {
-    const response = await apiClient.get("/api/settings/notifications");
+    const response = await apiClient.get("/settings/notifications");
     return response.data;
   };
 
 export const updateNotificationPreferences = async (
   data: NotificationPreferences,
 ): Promise<NotificationPreferences> => {
-  const response = await apiClient.put("/api/settings/notifications", data);
+  const response = await apiClient.put("/settings/notifications", data);
   return response.data;
 };
 
 // User Preferences
 export const getUserPreferences = async (): Promise<UserPreferences> => {
-  const response = await apiClient.get("/api/settings/preferences");
+  const response = await apiClient.get("/settings/preferences");
   return response.data;
 };
 
 export const updateUserPreferences = async (
   data: UserPreferences,
 ): Promise<UserPreferences> => {
-  const response = await apiClient.put("/api/settings/preferences", data);
+  const response = await apiClient.put("/settings/preferences", data);
   return response.data;
 };
 
@@ -119,7 +119,7 @@ export const getAuditTrail = async (
   page: number = 0,
   size: number = 20,
 ): Promise<PageResponse<AuditLog>> => {
-  const response = await apiClient.get("/api/settings/audit-trail", {
+  const response = await apiClient.get("/settings/audit-trail", {
     params: { page, size },
   });
   return response.data;

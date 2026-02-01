@@ -3,6 +3,7 @@ package com.medhelp.pms.modules.auth_module.domain.services;
 import com.medhelp.pms.modules.auth_module.application.dtos.*;
 import com.medhelp.pms.modules.auth_module.application.mappers.UserMapper;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.Role;
 import com.medhelp.pms.modules.auth_module.domain.entities.UserSession;
 import com.medhelp.pms.modules.auth_module.domain.repositories.AuthRepository;
 import com.medhelp.pms.modules.auth_module.domain.repositories.UserSessionRepository;
@@ -60,13 +61,16 @@ class AuthenticationServiceTest {
 
         @BeforeEach
         void setUp() {
+                Role userRole = new Role();
+                userRole.setName("USER");
+
                 testUser = User.builder()
                                 .username("testuser")
                                 .email("test@example.com")
                                 .passwordHash("encoded-password")
                                 .firstName("Test")
                                 .lastName("User")
-                                .role("USER")
+                                .roles(Set.of(userRole))
                                 .userType(UserType.EXTERNAL)
                                 .isActive(true)
                                 .isEmailVerified(true)
@@ -88,7 +92,7 @@ class AuthenticationServiceTest {
                                 .email("test@example.com")
                                 .firstName("Test")
                                 .lastName("User")
-                                .role("USER")
+                                .roles(Set.of("USER"))
                                 .userType("EXTERNAL")
                                 .isActive(true)
                                 .isEmailVerified(true)
@@ -385,7 +389,11 @@ class AuthenticationServiceTest {
                                         .passwordHash("encoded")
                                         .firstName("Test")
                                         .lastName("User")
-                                        .role("USER")
+                                        .roles(Set.of(new Role() {
+                                                {
+                                                        setName("USER");
+                                                }
+                                        }))
                                         .userType(UserType.EXTERNAL)
                                         .isActive(true)
                                         .isEmailVerified(false)

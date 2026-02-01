@@ -40,7 +40,7 @@ public class ProfileSettingsDto {
     @Size(max = 50, message = "License number must not exceed 50 characters")
     private String licenseNumber;
 
-    private String role;
+    private java.util.Set<String> roles;
     private String userType;
     private Boolean isActive;
     private Boolean isEmailVerified;

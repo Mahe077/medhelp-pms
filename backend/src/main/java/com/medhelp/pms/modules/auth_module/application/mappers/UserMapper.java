@@ -2,6 +2,10 @@ package com.medhelp.pms.modules.auth_module.application.mappers;
 
 import com.medhelp.pms.modules.auth_module.application.dtos.UserDto;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.Role;
+
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +22,7 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
-                .role(user.getRole())
+                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
                 .licenseNumber(user.getLicenseNumber())
                 .userType(user.getUserType() != null ? user.getUserType().name() : null)
                 .isActive(user.getIsActive())

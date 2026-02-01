@@ -37,8 +37,10 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "role", nullable = false, length = 50)
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", schema = "user_schema", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Builder.Default
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "license_number", length = 50)
     private String licenseNumber;
@@ -81,10 +83,17 @@ public class User extends BaseEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
-        // Add role as authority
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        // Add roles as authorities
+        roles.forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        });
 
-        // Add permissions as authorities
+        // Add permissions (if loaded separately) and permissions from roles could be
+        // added here if needed?
+        // Usually roles map to permissions.
+        // For simplicity, let's assume permissions are also loaded or we rely on
+        // Role-based security for now.
+        // But the previous code had a permissions set.
         authorities.addAll(permissions.stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList());
@@ -135,7 +144,7 @@ public class User extends BaseEntity implements UserDetails {
         return permissions.contains(permission);
     }
 
-    public boolean hasRole(String role) {
-        return this.role.equalsIgnoreCase(role);
+    public boolean hasRole(String roleName) {
+        return roles.stream().anyMatch(r -> r.getName().equalsIgnoreCase(roleName));
     }
 }

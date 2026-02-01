@@ -1,4 +1,4 @@
-package com.medhelp.pms.modules.auth_module.application.dtos;
+package com.medhelp.pms.shared.application.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +13,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuditLogDto {
-
     private UUID id;
     private String eventType;
+    private String description;
     private String aggregateType;
     private UUID aggregateId;
-    private String eventData;
     private LocalDateTime occurredAt;
     private UUID userId;
     private String userName;
+    private String eventData;
     private Long sequenceNumber;
 }

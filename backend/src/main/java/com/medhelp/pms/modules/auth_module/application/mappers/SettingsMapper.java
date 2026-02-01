@@ -3,8 +3,12 @@ package com.medhelp.pms.modules.auth_module.application.mappers;
 import com.medhelp.pms.modules.auth_module.application.dtos.NotificationPreferencesDto;
 import com.medhelp.pms.modules.auth_module.application.dtos.ProfileSettingsDto;
 import com.medhelp.pms.modules.auth_module.application.dtos.UserPreferencesDto;
+import com.medhelp.pms.modules.auth_module.domain.entities.Role;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.modules.auth_module.domain.entities.UserNotificationPreferences;
+
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +26,8 @@ public class SettingsMapper {
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
                 .licenseNumber(user.getLicenseNumber())
-                .role(user.getRole())
+                .roles(user.getRoles().stream().map(Role::getName)
+                        .collect(Collectors.toSet()))
                 .userType(user.getUserType() != null ? user.getUserType().name() : null)
                 .isActive(user.getIsActive())
                 .isEmailVerified(user.getIsEmailVerified())

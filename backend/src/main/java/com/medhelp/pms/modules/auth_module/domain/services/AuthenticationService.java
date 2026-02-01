@@ -2,11 +2,16 @@ package com.medhelp.pms.modules.auth_module.domain.services;
 
 import com.medhelp.pms.modules.auth_module.application.dtos.*;
 import com.medhelp.pms.modules.auth_module.application.mappers.UserMapper;
+import com.medhelp.pms.modules.auth_module.domain.entities.Role;
+import com.medhelp.pms.modules.auth_module.domain.entities.RolePermission;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.modules.auth_module.domain.entities.UserSession;
 import com.medhelp.pms.modules.auth_module.domain.events.UserLoggedInEvent;
 import com.medhelp.pms.modules.auth_module.domain.repositories.AuthRepository;
+import com.medhelp.pms.modules.auth_module.domain.repositories.RolePermissionRepository;
+import com.medhelp.pms.modules.auth_module.domain.repositories.RoleRepository;
 import com.medhelp.pms.modules.auth_module.domain.repositories.UserSessionRepository;
+import com.medhelp.pms.modules.auth_module.domain.value_objects.SystemUser;
 import com.medhelp.pms.modules.auth_module.domain.value_objects.UserType;
 import com.medhelp.pms.shared.domain.events.DomainEventPublisher;
 import com.medhelp.pms.shared.domain.exceptions.BusinessException;
@@ -29,7 +34,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +47,8 @@ public class AuthenticationService {
 
     private final AuthRepository authRepository;
     private final UserSessionRepository userSessionRepository;
+    private final RoleRepository roleRepository;
+    private final RolePermissionRepository rolePermissionRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -47,6 +58,25 @@ public class AuthenticationService {
 
     @Value("${jwt.refresh-expiration}")
     private long refreshTokenDuration;
+
+    /**
+     * @return System user id
+     */
+    public UUID getSystemUserId() {
+        User systemUser = authRepository.findByUsername(SystemUser.USERNAME)
+                .orElseThrow(() -> new BusinessException("System User not found"));
+        return systemUser.getId();
+    }
+
+    /**
+     *
+     * @return System user
+     */
+
+    public User getSystemUser() {
+        return authRepository.findByUsername("system")
+                .orElseThrow(() -> new IllegalStateException("System user not found"));
+    }
 
     /**
      * Authenticate user and generate tokens
@@ -87,6 +117,19 @@ public class AuthenticationService {
                 throw new BusinessException("Email not verified. A new verification link has been sent to your email.");
             }
 
+            // Load permissions based on roles
+            log.info("Loading permissions for roles: {}",
+                    user.getRoles().stream().map(Role::getName).collect(Collectors.joining(", ")));
+            Set<String> allPermissions = new HashSet<>();
+
+            for (Role role : user.getRoles()) {
+                List<RolePermission> rolePermissions = rolePermissionRepository.findAllByRoleId(role.getId());
+                rolePermissions.forEach(rp -> allPermissions.add(rp.getPermission().getName()));
+            }
+
+            user.setPermissions(allPermissions);
+            log.info("Loaded {} permissions for user {}", allPermissions.size(), user.getUsername());
+
             // Update last login
             user.updateLastLogin();
             authRepository.save(user);
@@ -108,7 +151,7 @@ public class AuthenticationService {
                     .username(user.getUsername())
                     .email(user.getEmail())
                     .userType(user.getUserType().name())
-                    .role(user.getRole())
+                    .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
                     .ipAddress(ipAddress)
                     .userAgent(userAgent)
                     .loginAt(LocalDateTime.now())
@@ -265,6 +308,9 @@ public class AuthenticationService {
 
         String verificationToken = UUID.randomUUID().toString();
 
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new BusinessException("Default role 'USER' not found"));
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -272,7 +318,7 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phone(request.getPhone())
-                .role("USER") // Default role for external users
+                .roles(Set.of(userRole))
                 .userType(UserType.EXTERNAL)
                 .isActive(true)
                 .isEmailVerified(false)

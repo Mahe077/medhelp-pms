@@ -1,14 +1,19 @@
-import { apiClient, ApiResponse } from "./client";
+import apiClient from "./client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // --- Types ---
 
+interface ApiResponse<T> {
+  data: T;
+  message?: string;
+}
+
 export interface Permission {
   id: string;
-  scope: string;
-  action: string;
-  resourceKey: string;
+  name: string;
   description: string;
+  resource: string;
+  action: string;
 }
 
 export interface Role {
@@ -38,6 +43,26 @@ export interface CreateRoleRequest {
 export interface UpdateRolePermissionsRequest {
   permissionIds: string[];
 }
+
+// Users
+export const getUsers = async (): Promise<User[]> => {
+  const response = await apiClient.get<ApiResponse<User[]>>("/access/users");
+  return response.data.data;
+};
+
+export const assignRoleToUser = async (
+  userId: string,
+  roleId: string,
+): Promise<void> => {
+  await apiClient.post(`/access/users/${userId}/roles/${roleId}`);
+};
+
+export const removeRoleFromUser = async (
+  userId: string,
+  roleId: string,
+): Promise<void> => {
+  await apiClient.delete(`/access/users/${userId}/roles/${roleId}`);
+};
 
 // --- API Functions ---
 
@@ -74,38 +99,64 @@ export const getPermissions = async (): Promise<Permission[]> => {
   return response.data.data;
 };
 
-// Users (for Access Management)
-// Note: This matches the API endpoint usually used for listing users.
-// If generic user listing is in another module, import from there.
-// Assuming checking AccessController doesn't have list users, wait.
-// Implementation Plan said: GET /api/access/users (List users with roles)
-// But I didn't implement getAllUsers in AccessController yet!
-// Checking AccessController.java... it only has endpoints for Roles and Permissions and Assign/Remove Role.
-// I missed `getAllUsers` implementation in AccessController. I should add it or use a UserModule controller.
-// For now, let's assume I will add it or use functionality from User management.
-// Actually, `AccessController` should probably expose a user list for admins.
-// Let's add fetchUsers to API client and then go back and update Backend if needed.
-// Update: I will check AccessController again.
+export interface CreatePermissionRequest {
+  name: string;
+  description: string;
+  resource: string;
+  action: string;
+}
 
-export const getUsers = async (): Promise<User[]> => {
-  // Check if I implemented this in AccessController.
-  // If not, I need to implement it.
-  const response = await apiClient.get<ApiResponse<User[]>>("/access/users");
+export const createPermission = async (
+  data: CreatePermissionRequest,
+): Promise<Permission> => {
+  const response = await apiClient.post<ApiResponse<Permission>>(
+    "/access/permissions",
+    data,
+  );
   return response.data.data;
 };
 
-export const assignRoleToUser = async (
-  userId: string,
+export const assignPermissionToRole = async (
   roleId: string,
+  permissionId: string,
 ): Promise<void> => {
-  await apiClient.post(`/access/users/${userId}/roles/${roleId}`);
+  await apiClient.post(`/access/roles/${roleId}/permissions`, { permissionId });
 };
 
-export const removeRoleFromUser = async (
-  userId: string,
+export const removePermissionFromRole = async (
   roleId: string,
+  permissionId: string,
 ): Promise<void> => {
-  await apiClient.delete(`/access/users/${userId}/roles/${roleId}`);
+  await apiClient.delete(`/access/roles/${roleId}/permissions/${permissionId}`);
+};
+
+// Audit Logs
+export interface AuditLog {
+  id: string;
+  eventType: string;
+  description: string;
+  aggregateType?: string;
+  aggregateId?: string;
+  occurredAt: string;
+  userId?: string;
+  userName?: string;
+  eventData?: string;
+  sequenceNumber?: number;
+}
+
+export const getAuditLogs = async (): Promise<AuditLog[]> => {
+  const response =
+    await apiClient.get<ApiResponse<AuditLog[]>>("/access/audit-logs");
+  return response.data.data;
+};
+
+export const getPermissionsForRole = async (
+  roleId: string,
+): Promise<Permission[]> => {
+  const response = await apiClient.get<ApiResponse<Permission[]>>(
+    `/access/roles/${roleId}/permissions`,
+  );
+  return response.data.data;
 };
 
 // --- Hooks ---
@@ -117,6 +168,14 @@ export const useRoles = () => {
   });
 };
 
+export const useRolePermissions = (roleId: string | null) => {
+  return useQuery({
+    queryKey: ["role-permissions", roleId],
+    queryFn: () => getPermissionsForRole(roleId!),
+    enabled: !!roleId,
+  });
+};
+
 export const usePermissions = () => {
   return useQuery({
     queryKey: ["permissions"],
@@ -124,10 +183,10 @@ export const usePermissions = () => {
   });
 };
 
-export const useAccessUsers = () => {
+export const useAuditLogs = () => {
   return useQuery({
-    queryKey: ["access-users"],
-    queryFn: getUsers,
+    queryKey: ["audit-logs"],
+    queryFn: getAuditLogs,
   });
 };
 
@@ -141,40 +200,73 @@ export const useCreateRole = () => {
   });
 };
 
-export const useUpdateRolePermissions = () => {
+export const useCreatePermission = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createPermission,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["permissions"] });
+    },
+  });
+};
+
+export const useAssignPermission = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       roleId,
-      permissionIds,
+      permissionId,
     }: {
       roleId: string;
-      permissionIds: string[];
-    }) => updateRolePermissions(roleId, permissionIds),
+      permissionId: string;
+    }) => assignPermissionToRole(roleId, permissionId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });
     },
   });
 };
 
-export const useAssignRole = () => {
+export const useRemovePermission = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      roleId,
+      permissionId,
+    }: {
+      roleId: string;
+      permissionId: string;
+    }) => removePermissionFromRole(roleId, permissionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["roles"] });
+    },
+  });
+};
+
+export const useUsers = () => {
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
+  });
+};
+
+export const useAssignRoleToUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ userId, roleId }: { userId: string; roleId: string }) =>
       assignRoleToUser(userId, roleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["access-users"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };
 
-export const useRemoveRole = () => {
+export const useRemoveRoleFromUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ userId, roleId }: { userId: string; roleId: string }) =>
       removeRoleFromUser(userId, roleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["access-users"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };

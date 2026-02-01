@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,4 +27,6 @@ public interface AuthRepository extends JpaRepository<User, UUID> {
     Optional<User> findActiveByUsername(@Param("username") String username);
 
     Optional<User> findByVerificationToken(@Param("verificationToken") String verificationToken);
+
+    List<User> getAllUser();
 }

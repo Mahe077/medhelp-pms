@@ -186,12 +186,13 @@
       "confirm": "Confirm",
       "loading": "Loading...",
       "error": "An error occurred",
-      "success": "Success"
+      "success": "Success",
+      "actions": "Actions"
     }
   },
   "Access": {
-    "title": "Access",
-    "description": "Manage access to the system.",
+    "title": "Access Control",
+    "description": "Manage users, roles, permissions, and view audit logs.",
     "tabs": {
       "users": "Users",
       "roles": "Roles",
@@ -199,35 +200,60 @@
       "auditTrail": "Audit Trail"
     },
     "users": {
-      "title": "Users",
-      "description": "Manage users.",
-      "noUsers": "No users found",
+      "title": "Users Management",
+      "description": "Create and manage users.",
+      "create": "Create User",
+      "name": "User Name",
+      "email": "Email Address",
+      "role": "Role",
+      "userType": "User Type",
+      "emailVerified": "Email Verified",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "verified": "Verified",
+      "notVerified": "Not Verified",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "updateSuccess": "User updated successfully",
+      "updateError": "Failed to update user",
+      "noUsers": "No users found.",
       "loading": "Loading users..."
     },
     "roles": {
-      "title": "Roles",
-      "description": "Manage roles.",
-      "noRoles": "No roles found",
-      "loading": "Loading roles..."
+      "title": "Roles Management",
+      "description": "Create and manage user roles.",
+      "create": "Create Role",
+      "name": "Role Name",
+      "roleDesc": "Description",
+      "noRoles": "No roles found.",
+      "assignPermission": "Assign Permission",
+      "removePermission": "Remove",
+      "permissionsFor": "Permissions for",
+      "loading": "Loading roles...",
+      "managePermissions": "Manage Permissions",
+      "manageRoles": "Manage Roles"
     },
     "permissions": {
-      "title": "Permissions",
-      "description": "Manage permissions.",
-      "noPermissions": "No permissions found",
+      "title": "Permissions Management",
+      "description": "Define available permissions for the system.",
+      "create": "Create Permission",
+      "name": "Permission Name",
+      "permDesc": "Description",
+      "resource": "Resource",
+      "action": "Action",
+      "noPermissions": "No permissions found.",
       "loading": "Loading permissions..."
     },
     "auditTrail": {
       "title": "Audit Trail",
-      "description": "View history of all changes to your settings.",
-      "noRecords": "No audit records found",
-      "loading": "Loading audit trail...",
-      "changedBy": "Changed By",
-      "changedAt": "Changed At",
-      "settingChanged": "Setting Changed",
-      "oldValue": "Old Value",
-      "newValue": "New Value",
-      "loadMore": "Load More",
-      "page": "Page"
+      "description": "View system access and modification logs.",
+      "event": "Event",
+      "descriptionCol": "Description",
+      "performedBy": "Performed By",
+      "time": "Time",
+      "noRecords": "No audit records found.",
+      "loading": "Loading audit trail..."
     },
     "common": {
       "save": "Save",
@@ -237,7 +263,8 @@
       "confirm": "Confirm",
       "loading": "Loading...",
       "error": "An error occurred",
-      "success": "Success"
+      "success": "Success",
+      "actions": "Actions"
     }
   }
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * Domain event published when a user successfully logs in.
@@ -39,7 +40,7 @@ public class UserLoggedInEvent extends DomainEvent {
         private String username;
         private String email;
         private String userType;
-        private String role;
+        private Set<String> roles;
         private String ipAddress;
         private String userAgent;
         private LocalDateTime loginAt;

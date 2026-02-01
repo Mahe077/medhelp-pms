@@ -1,7 +1,8 @@
 package com.medhelp.pms.modules.auth_module.api.controllers;
 
 import com.medhelp.pms.modules.auth_module.application.dtos.*;
-import com.medhelp.pms.modules.auth_module.application.services.SettingsService;
+import com.medhelp.pms.modules.auth_module.domain.services.SettingsService;
+import com.medhelp.pms.shared.application.dtos.AuditLogDto;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/settings")
+@RequestMapping("/settings")
 @RequiredArgsConstructor
 @Slf4j
 @PreAuthorize("isAuthenticated()")

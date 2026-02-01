@@ -1,7 +1,8 @@
-package com.medhelp.pms.modules.auth_module.application.services;
+package com.medhelp.pms.modules.auth_module.domain.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medhelp.pms.modules.auth_module.application.dtos.*;
+import com.medhelp.pms.shared.application.dtos.AuditLogDto;
 import com.medhelp.pms.modules.auth_module.application.mappers.SettingsMapper;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
 import com.medhelp.pms.modules.auth_module.domain.entities.UserNotificationPreferences;
