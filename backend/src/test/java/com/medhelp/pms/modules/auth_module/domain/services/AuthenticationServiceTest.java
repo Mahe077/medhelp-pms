@@ -92,7 +92,7 @@ class AuthenticationServiceTest {
                                 .email("test@example.com")
                                 .firstName("Test")
                                 .lastName("User")
-                                .roles(Set.of("USER"))
+                                .roles(Set.of(RoleDto.builder().name("USER").build()))
                                 .userType("EXTERNAL")
                                 .isActive(true)
                                 .isEmailVerified(true)

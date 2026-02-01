@@ -31,8 +31,11 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, JwtService jwtService,
-            CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfig(
+            UserDetailsService userDetailsService,
+            JwtService jwtService,
+            CorsConfigurationSource corsConfigurationSource
+    ) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
         this.corsConfigurationSource = corsConfigurationSource;

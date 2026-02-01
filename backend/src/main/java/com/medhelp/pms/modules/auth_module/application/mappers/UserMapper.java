@@ -2,14 +2,16 @@ package com.medhelp.pms.modules.auth_module.application.mappers;
 
 import com.medhelp.pms.modules.auth_module.application.dtos.UserDto;
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
-import com.medhelp.pms.modules.auth_module.domain.entities.Role;
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Component;
-
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private final RoleMapper roleMapper;
+
     public UserDto toDto(User user) {
         if (user == null) {
             return null;
@@ -22,7 +24,7 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
-                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
+                .roles(user.getRoles().stream().map(roleMapper::toDto).collect(Collectors.toSet()))
                 .licenseNumber(user.getLicenseNumber())
                 .userType(user.getUserType() != null ? user.getUserType().name() : null)
                 .isActive(user.getIsActive())

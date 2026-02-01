@@ -7,7 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/Card';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import {
     Table,
     TableBody,
@@ -37,7 +37,7 @@ import { Loader2, Plus, X } from 'lucide-react';
 
 export default function UsersTab() {
     const t = useTranslations('Access.users');
-    const common = useTranslations('Common');
+    const common = useTranslations('Access.common');
 
     const { data: users, isLoading: isUsersLoading } = useUsers();
     const { data: roles } = useRoles();
@@ -91,7 +91,7 @@ export default function UsersTab() {
                             <TableHead>{t('email')}</TableHead>
                             <TableHead>{t('roles')}</TableHead>
                             <TableHead>{t('status')}</TableHead>
-                            <TableHead>{t('actions')}</TableHead>
+                            <TableHead>{common('actions')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -154,7 +154,7 @@ export default function UsersTab() {
                             </DialogDescription>
                         </DialogHeader>
                         <div className="py-4">
-                            <Select value={selectedRole} onValueChange={setSelectedRole}>
+                            <Select value={selectedRole} onValueChange={setSelectedRole}> {/* TODO: check the this feature*/}
                                 <SelectTrigger>
                                     <SelectValue placeholder={t('selectRole')} />
                                 </SelectTrigger>

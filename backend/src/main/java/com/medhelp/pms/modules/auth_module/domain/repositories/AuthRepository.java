@@ -27,6 +27,4 @@ public interface AuthRepository extends JpaRepository<User, UUID> {
     Optional<User> findActiveByUsername(@Param("username") String username);
 
     Optional<User> findByVerificationToken(@Param("verificationToken") String verificationToken);
-
-    List<User> getAllUser();
 }
