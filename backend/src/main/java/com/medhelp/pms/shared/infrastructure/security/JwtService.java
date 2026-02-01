@@ -1,6 +1,7 @@
 package com.medhelp.pms.shared.infrastructure.security;
 
 import com.medhelp.pms.modules.auth_module.domain.entities.User;
+import com.medhelp.pms.modules.auth_module.domain.entities.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,6 +15,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.crypto.SecretKey;
 
 @Service
 @Slf4j
@@ -32,7 +35,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId().toString());
         claims.put("email", user.getEmail());
-        claims.put("role", user.getRole());
+        claims.put("roles", user.getRoles().stream().map(Role::getName).collect(java.util.stream.Collectors.toList()));
         claims.put("permissions", user.getPermissions());
         claims.put("fullName", user.getFullName());
 
@@ -55,11 +58,11 @@ public class JwtService {
      */
     private String buildToken(Map<String, Object> extraClaims, String subject, long expiration) {
         return Jwts.builder()
-                .setClaims(extraClaims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .claims(extraClaims)
+                .subject(subject)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -71,10 +74,10 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        try{
+        try {
             final String username = extractUsername(token);
             return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-        }catch (JwtException e){
+        } catch (JwtException e) {
             log.error("Token validation error: {}", e.getMessage());
             return false;
         }
@@ -99,10 +102,10 @@ public class JwtService {
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(getSigningKey())
+                    .verifyWith((SecretKey) getSigningKey())
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
         } catch (ExpiredJwtException e) {
             log.error("Token expired: {}", e.getMessage());
             throw new RuntimeException(e);
